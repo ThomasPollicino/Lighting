@@ -4,7 +4,9 @@ var VSHADER_SOURCE = `
   precision mediump float;
   attribute vec4 a_Position;
   attribute vec2 a_UV;
+  attribute vec3 a_Normal;
   varying vec2 v_UV;
+  varying vec3 v_Normal;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_GlobalRotateMatrix;
   uniform mat4 u_ViewMatrix;
@@ -12,12 +14,14 @@ var VSHADER_SOURCE = `
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
+    v_Normal = a_Normal;
   }`
 
 // Fragment shader program
 var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
+  varying vec3 v_Normal;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
@@ -25,7 +29,10 @@ var FSHADER_SOURCE = `
   uniform int u_whichTexture;
   void main() {
 
-    if(u_whichTexture == -2){
+    if(u_whichTexture == -4){
+      gl_FragColor = vec4((v_Normal+1.0)/2.0, 1.0);
+    }
+    else if(u_whichTexture == -2){
       gl_FragColor = u_FragColor;
     }
     else if(u_whichTexture == -1){
@@ -52,6 +59,7 @@ let canvas;
 let gl;
 let a_Position;
 let a_UV;
+let a_Normal;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
@@ -96,6 +104,12 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of a_UV');
     return;
   }
+
+  a_Normal = gl.getAttribLocation(gl.program, 'a_Normal');
+  if (a_Normal < 0) {
+    console.log('Failed to get the storage location of a_Normal');
+    return;
+  }  
 
   // Get the storage location of FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
@@ -196,7 +210,7 @@ let heliON=false;
 let missileOn=false;
 let missileStartTime = null;
 let missileDone=false;
-
+let g_normalOn=false;
 
 
 
@@ -227,6 +241,8 @@ function addActionsForHtmlUI(){
       );
       heliON = false;
     };
+    document.getElementById('normalOn').onclick = function() {g_normalOn = true;};
+    document.getElementById('normalOff').onclick = function() {g_normalOn = false;};
 
 
 
@@ -492,6 +508,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-0;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,2.5,1);
         cube.render();
@@ -563,6 +582,17 @@ function renderAllShapes(){
 
   drawMap();
 
+  var sphere = new Sphere();
+  sphere.color = [1, 0.2, 0.2, 1];
+  sphere.textureNum = -1;
+  if(g_normalOn){
+    sphere.textureNum=-4;
+  }
+  sphere.matrix.translate(0, 0, 3);
+  sphere.matrix.scale(0.5, 0.5, 0.5);
+  sphere.render();
+
+
   var floor = new Cube();
   floor.color=[0.4,0.4,0.4,1.0];
   floor.textureNum=-2;
@@ -574,7 +604,10 @@ function renderAllShapes(){
   var sky = new Cube();
   sky.color=[0.4,0.4,1,1.0];
   sky.textureNum=-3;
-  sky.matrix.scale(50,50,50);
+  if(g_normalOn){
+    sky.textureNum=-4;
+  }
+  sky.matrix.scale(-50,-50,-50);
   sky.matrix.translate(-0.5,-0.5,-0.5);
   sky.render();
 
