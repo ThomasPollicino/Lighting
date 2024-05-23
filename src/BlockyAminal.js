@@ -30,6 +30,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler2;
   uniform int u_whichTexture;
   uniform vec3 u_lightPos;
+  uniform vec3 u_cameraPos;
   varying vec4 v_VertPos;
   void main() {
 
@@ -58,13 +59,32 @@ var FSHADER_SOURCE = `
       gl_FragColor = vec4(1,0.2,0.2,1);
     }
 
-    vec3 lightVector = vec3(v_VertPos) - u_lightPos;
+    vec3 lightVector = u_lightPos - vec3(v_VertPos);
     float r=length(lightVector);
-    if(r<1.0){
-      gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-    } else if(r<2.0) {
-      gl_FragColor = vec4(0.0,1.0,0.0,1.0);
-    }
+
+    //float r=length(lightVector);
+    //if(r<1.0){
+    //  gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    //} else if(r<2.0) {
+    //  gl_FragColor = vec4(0.0,1.0,0.0,1.0);
+    //}
+
+    vec3 L = normalize(lightVector);
+    vec3 N = normalize(v_Normal);
+    float nDotL = max(dot(N, L), 0.0);
+
+    //Reflection
+    vec3 R = reflect(-L, N);
+
+    //eye
+    vec3 E = normalize(u_cameraPos-vec3(v_VertPos));
+
+    //Specular
+    float specular = pow(max(dot(E, R), 0.0), 1.0);
+
+    vec3 diffuse = vec3(gl_FragColor) * nDotL*0.7;
+    vec3 ambient = vec3(gl_FragColor) * 0.3;
+    gl_FragColor = vec4(diffuse + ambient + specular, 1.0);
   }`
 
 let canvas;
@@ -83,6 +103,7 @@ let u_Sampler1;
 let u_Sampler2;
 let u_whichTexture;
 let u_lightPos;
+let u_cameraPos;
 
 function setupWebGl(){
     // Retrieve <canvas> element
@@ -136,6 +157,13 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_lightPos');
     return;
   }
+
+  u_cameraPos = gl.getUniformLocation(gl.program, 'u_cameraPos');
+  if (!u_cameraPos) {
+    console.log('Failed to get the storage location of u_cameraPos');
+    return;
+  }
+
 
   // Get the storage location of u_ModelMatrix
   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
@@ -232,7 +260,7 @@ let missileDone=false;
 let g_normalOn=false;
 let g_yellowAngle=0;
 let g_magentaAngle=0;
-let g_yellowAnimation=true;
+let g_yellowAnimation=false;
 let g_magentaAnimation=false;
 let g_lightPos=[0,1,-2];
 
@@ -483,7 +511,9 @@ var g_seconds=performance.now()/1000.0 - g_startTime;
 
 function tick() {
 
-  
+  updateAnimationAngles();
+
+
   if (g_startTime === null) {
     g_startTime = performance.now() / 1000.0;
     if (g_quick) {
@@ -497,6 +527,15 @@ function tick() {
   }
 }
 
+function updateAnimationAngles(){
+  if(g_yellowAnimation==true){
+    g_yellowAngle=(45*Math.sin(g_seconds));
+  }
+  if(g_magentaAnimation){
+    g_magentaAngle=(45*Math.sin(g_seconds));
+  }
+  //g_lightPos[0]=Math.cos(g_seconds);
+}
 
 
 
@@ -617,12 +656,14 @@ function renderAllShapes(){
 
   gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
 
+  gl.uniform3f(u_cameraPos, camera.eye.x, camera.eye.y, camera.eye.z);
+
   drawMap();
 
   var light=new Cube();
   light.color=[2,2,0,1];
   light.matrix.translate(g_lightPos[0],g_lightPos[1],g_lightPos[2]);
-  light.matrix.scale(0.1,0.1,0.1);
+  light.matrix.scale(-0.1,-0.1,-0.1);
   light.matrix.translate(-0.5,-0.5,-0.5);
   light.render();
 
@@ -632,7 +673,7 @@ function renderAllShapes(){
   if(g_normalOn){
     sphere.textureNum=-4;
   }
-  sphere.matrix.translate(0, 0, 3);
+  sphere.matrix.translate(-3, 0, -3);
   sphere.matrix.scale(0.5, 0.5, 0.5);
   sphere.render();
 
