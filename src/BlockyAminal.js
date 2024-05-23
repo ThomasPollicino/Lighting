@@ -5,6 +5,7 @@ var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   attribute vec2 a_UV;
   attribute vec3 a_Normal;
+  varying vec4 v_VertPos;
   varying vec2 v_UV;
   varying vec3 v_Normal;
   uniform mat4 u_ModelMatrix;
@@ -15,6 +16,7 @@ var VSHADER_SOURCE = `
     gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
     v_Normal = a_Normal;
+    v_VertPos = u_ModelMatrix * a_Position;
   }`
 
 // Fragment shader program
@@ -27,6 +29,8 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
   uniform int u_whichTexture;
+  uniform vec3 u_lightPos;
+  varying vec4 v_VertPos;
   void main() {
 
     if(u_whichTexture == -4){
@@ -53,6 +57,14 @@ var FSHADER_SOURCE = `
     else{
       gl_FragColor = vec4(1,0.2,0.2,1);
     }
+
+    vec3 lightVector = vec3(v_VertPos) - u_lightPos;
+    float r=length(lightVector);
+    if(r<1.0){
+      gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    } else if(r<2.0) {
+      gl_FragColor = vec4(0.0,1.0,0.0,1.0);
+    }
   }`
 
 let canvas;
@@ -70,6 +82,7 @@ let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
 let u_whichTexture;
+let u_lightPos;
 
 function setupWebGl(){
     // Retrieve <canvas> element
@@ -115,6 +128,12 @@ function connectVariablesToGLSL(){
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get the storage location of u_FragColor');
+    return;
+  }
+
+  u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
+  if (!u_lightPos) {
+    console.log('Failed to get the storage location of u_lightPos');
     return;
   }
 
@@ -211,6 +230,11 @@ let missileOn=false;
 let missileStartTime = null;
 let missileDone=false;
 let g_normalOn=false;
+let g_yellowAngle=0;
+let g_magentaAngle=0;
+let g_yellowAnimation=true;
+let g_magentaAnimation=false;
+let g_lightPos=[0,1,-2];
 
 
 
@@ -243,7 +267,18 @@ function addActionsForHtmlUI(){
     };
     document.getElementById('normalOn').onclick = function() {g_normalOn = true;};
     document.getElementById('normalOff').onclick = function() {g_normalOn = false;};
+    document.getElementById('animationYellowOffButton').onclick = function() {g_yellowAnimation = false;};
+    document.getElementById('animationYellowOnButton').onclick = function() {g_yellowAnimation = true;};
+    document.getElementById('animationMagentaOffButton').onclick = function() {g_magentaAnimation = false;};
+    document.getElementById('animationMagentaOnButton').onclick = function() {g_magentaAnimation = true;};
 
+    document.getElementById('yellowSlide').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_yellowAngle = this.value; renderAllShapes();}});
+    document.getElementById('magentaSlide').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_magentaAngle = this.value; renderAllShapes();}});
+    document.getElementById('lightSlideX').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[0] = this.value/100; renderAllShapes();}});
+    document.getElementById('lightSlideY').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[1] = this.value/100; renderAllShapes();}});
+    document.getElementById('lightSlideZ').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[2] = this.value/100; renderAllShapes();}});
+
+    canvas.onmousedown = function(ev) { if(ev.buttons==1) { handleTextureClick(ev)}};
 
 
 
@@ -580,7 +615,16 @@ function renderAllShapes(){
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+
   drawMap();
+
+  var light=new Cube();
+  light.color=[2,2,0,1];
+  light.matrix.translate(g_lightPos[0],g_lightPos[1],g_lightPos[2]);
+  light.matrix.scale(0.1,0.1,0.1);
+  light.matrix.translate(-0.5,-0.5,-0.5);
+  light.render();
 
   var sphere = new Sphere();
   sphere.color = [1, 0.2, 0.2, 1];
