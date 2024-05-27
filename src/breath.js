@@ -10,7 +10,10 @@ function godzillaLoad(){
   if(g_normalOn){
     rightFoot.textureNum=-4;
   }
+  rightFoot.normalMatrix.setInverseOf(rightFoot.matrix).transpose();
   rightFoot.render();
+
+
   //Left Foot
   var leftFoot = new Cube();
   leftFoot.color=[0.2,0.2,0.2,1.0];
@@ -24,6 +27,8 @@ function godzillaLoad(){
   if(g_normalOn){
     leftFoot.textureNum=-4;
   }
+  leftFoot.normalMatrix.setInverseOf(leftFoot.matrix).transpose();
+
   leftFoot.render();
 
 
@@ -46,6 +51,7 @@ function godzillaLoad(){
   if(g_normalOn){
     bRightleg.textureNum=-4;
   }
+  bRightleg.normalMatrix.setInverseOf(bRightleg.matrix).transpose();
   bRightleg.render();
 
   //BottmLeftLeg
@@ -66,6 +72,8 @@ function godzillaLoad(){
   if(g_normalOn){
     bLeftleg.textureNum=-4;
   }
+  bLeftleg.normalMatrix.setInverseOf(bLeftleg.matrix).transpose();
+
   bLeftleg.render();
 
   //TopRightLeg
@@ -86,6 +94,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tRightleg.textureNum=-4;
   }
+  tRightleg.normalMatrix.setInverseOf(tRightleg.matrix).transpose();
   tRightleg.render();
 
   //TopLeftLeg
@@ -107,6 +116,8 @@ function godzillaLoad(){
   if(g_normalOn){
     tLeftleg.textureNum=-4;
   }
+  tLeftleg.normalMatrix.setInverseOf(tLeftleg.matrix).transpose();
+
   tLeftleg.render();
 
 
@@ -138,6 +149,8 @@ function godzillaLoad(){
   if(g_normalOn){
     body.textureNum=-4;
   }
+  body.normalMatrix.setInverseOf(body.matrix).transpose();
+
   body.render();
 
   //ArmRight
@@ -161,6 +174,8 @@ function godzillaLoad(){
   if(g_normalOn){
     armRight.textureNum=-4;
   }
+  armRight.normalMatrix.setInverseOf(armRight.matrix).transpose();
+
   armRight.render();
 
   //ArmLeft
@@ -185,6 +200,8 @@ function godzillaLoad(){
   if(g_normalOn){
     armLeft.textureNum=-4;
   }
+  armLeft.normalMatrix.setInverseOf(armLeft.matrix).transpose();
+
   armLeft.render();
 
 
@@ -199,6 +216,8 @@ function godzillaLoad(){
   if(g_normalOn){
     chest.textureNum=-4;
   }
+  chest.normalMatrix.setInverseOf(chest.matrix).transpose();
+
   chest.render();
 
   //Peck
@@ -211,6 +230,7 @@ function godzillaLoad(){
   if(g_normalOn){
     peck.textureNum=-4;
   }
+  peck.normalMatrix.setInverseOf(peck.matrix).transpose();
   peck.render();
 
   //Neck
@@ -223,6 +243,7 @@ function godzillaLoad(){
   if(g_normalOn){
     neck.textureNum=-4;
   }
+  neck.normalMatrix.setInverseOf(neck.matrix).transpose();
   neck.render();
 
   //Head
@@ -270,6 +291,7 @@ function godzillaLoad(){
   if(g_normalOn){
     head.textureNum=-4;
   }
+  head.normalMatrix.setInverseOf(head.matrix).transpose();
   head.render();
 
   
@@ -287,6 +309,8 @@ function godzillaLoad(){
   if(g_normalOn){
     mouthTop.textureNum=-4;
   }
+  mouthTop.normalMatrix.setInverseOf(mouthTop.matrix).transpose();
+
   mouthTop.render();
 
   //ToothOne
@@ -298,6 +322,8 @@ function godzillaLoad(){
   if(g_normalOn){
     toothOne.textureNum=-4;
   }
+  toothOne.normalMatrix.setInverseOf(toothOne.matrix).transpose();
+
   toothOne.render();
 
   //ToothTwo
@@ -309,6 +335,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothTwo.textureNum=-4;
   }
+  toothTwo.normalMatrix.setInverseOf(toothTwo.matrix).transpose();
   toothTwo.render();
 
   //ToothThree
@@ -320,6 +347,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothThree.textureNum=-4;
   }
+  toothThree.normalMatrix.setInverseOf(toothThree.matrix).transpose();
   toothThree.render();
 
   //ToothFour
@@ -331,6 +359,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothFour.textureNum=-4;
   }
+  toothFour.normalMatrix.setInverseOf(toothFour.matrix).transpose();
   toothFour.render();
 
 
@@ -374,6 +403,7 @@ function godzillaLoad(){
   if(g_normalOn){
     mouthBottom.textureNum=-4;
   }
+  mouthBottom.normalMatrix.setInverseOf(mouthBottom.matrix).transpose();
   mouthBottom.render();
 
   //ToothOne
@@ -385,6 +415,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothOneBot.textureNum=-4;
   }
+  toothOneBot.normalMatrix.setInverseOf(toothOneBot.matrix).transpose();
   toothOneBot.render();
 
   //ToothTwo
@@ -396,6 +427,8 @@ function godzillaLoad(){
   if(g_normalOn){
     toothTwoBot.textureNum=-4;
   }
+  toothTwoBot.normalMatrix.setInverseOf(toothTwoBot.matrix).transpose();
+
   toothTwoBot.render();
 
   //ToothThree
@@ -407,6 +440,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothThreeBot.textureNum=-4;
   }
+  toothThreeBot.normalMatrix.setInverseOf(toothThreeBot.matrix).transpose();
   toothThreeBot.render();
 
   //ToothFour
@@ -418,6 +452,7 @@ function godzillaLoad(){
   if(g_normalOn){
     toothFourBot.textureNum=-4;
   }
+  toothFourBot.normalMatrix.setInverseOf(toothFourBot.matrix).transpose();
   toothFourBot.render();
 
   //ToothFive
@@ -429,6 +464,8 @@ function godzillaLoad(){
   if(g_normalOn){
     toothFiveBot.textureNum=-4;
   }
+  toothFiveBot.normalMatrix.setInverseOf(toothFiveBot.matrix).transpose();
+
   toothFiveBot.render();
 
 
@@ -450,6 +487,8 @@ function godzillaLoad(){
   if(g_normalOn){
     eyeRight.textureNum=-4;
   }
+  eyeRight.normalMatrix.setInverseOf(eyeRight.matrix).transpose();
+
   eyeRight.render();
 
   
@@ -467,6 +506,7 @@ function godzillaLoad(){
   if(g_normalOn){
     eyeLeft.textureNum=-4;
   }
+  eyeLeft.normalMatrix.setInverseOf(eyeLeft.matrix).transpose();
   eyeLeft.render();
 
  
@@ -485,6 +525,7 @@ function godzillaLoad(){
   if(g_normalOn){
     back.textureNum=-4;
   }
+  back.normalMatrix.setInverseOf(back.matrix).transpose();
   back.render();
 
   //BackSpikes
@@ -510,6 +551,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeBack.textureNum=-4;
   }
+  spikeBack.normalMatrix.setInverseOf(spikeBack.matrix).transpose();
+
   spikeBack.render();
 
   var spikeBack2 = new Pyramid();
@@ -534,6 +577,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeBack2.textureNum=-4;
   }
+    spikeBack2.normalMatrix.setInverseOf(spikeBack2.matrix).transpose();
+
   spikeBack2.render();
 
   var spikeBack3 = new Pyramid();
@@ -558,6 +603,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeBack3.textureNum=-4;
   }
+      spikeBack3.normalMatrix.setInverseOf(spikeBack3.matrix).transpose();
+
   spikeBack3.render();
 
 
@@ -584,6 +631,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeBack4.textureNum=-4;
   }
+      spikeBack4.normalMatrix.setInverseOf(spikeBack4.matrix).transpose();
+
   spikeBack4.render();
 
   var spikeBack5 = new Pyramid();
@@ -606,6 +655,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeBack5.textureNum=-4;
   }
+      spikeBack5.normalMatrix.setInverseOf(spikeBack5.matrix).transpose();
+
   spikeBack5.render();
 
 
@@ -638,6 +689,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailStart.textureNum=-4;
   }
+  tailStart.normalMatrix.setInverseOf(tailStart.matrix).transpose();
   tailStart.render();
 
   
@@ -656,6 +708,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailTwo.textureNum=-4;
   }
+  tailTwo.normalMatrix.setInverseOf(tailTwo.matrix).transpose();
   tailTwo.render();
 
   var spikeTailTwo = new Pyramid();
@@ -678,6 +731,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeTailTwo.textureNum=-4;
   }
+  spikeTailTwo.normalMatrix.setInverseOf(spikeTailTwo.matrix).transpose();
+
   spikeTailTwo.render();
   
 
@@ -692,6 +747,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailThree.textureNum=-4;
   }
+  tailThree.normalMatrix.setInverseOf(tailThree.matrix).transpose();
   tailThree.render();
 
   var tailFour = new Cube();
@@ -705,6 +761,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailFour.textureNum=-4;
   }
+  tailFour.normalMatrix.setInverseOf(tailFour.matrix).transpose();
   tailFour.render();
 
   var spikeTailFour = new Pyramid();
@@ -727,6 +784,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeTailFour.textureNum=-4;
   }
+  spikeTailFour.normalMatrix.setInverseOf(spikeTailFour.matrix).transpose();
+
   spikeTailFour.render();
 
   var tailFive = new Cube();
@@ -740,6 +799,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailFive.textureNum=-4;
   }
+  tailFive.normalMatrix.setInverseOf(tailFive.matrix).transpose();
   tailFive.render();
 
   var tailSix = new Cube();
@@ -754,6 +814,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailSix.textureNum=-4;
   }
+  tailSix.normalMatrix.setInverseOf(tailSix.matrix).transpose();
   tailSix.render();
 
   var spikeTailSix = new Pyramid();
@@ -776,6 +837,8 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeTailSix.textureNum=-4;
   }
+  spikeTailSix.normalMatrix.setInverseOf(spikeTailSix.matrix).transpose();
+
   spikeTailSix.render();
 
   var tailSeven = new Cube();
@@ -790,6 +853,7 @@ function godzillaLoad(){
   if(g_normalOn){
     tailSeven.textureNum=-4;
   }
+  tailSeven.normalMatrix.setInverseOf(tailSeven.matrix).transpose();
   tailSeven.render();
   
   var spikeTail5 = new Pyramid();
@@ -813,6 +877,7 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeTail5.textureNum=-4;
   }
+  spikeTail5.normalMatrix.setInverseOf(spikeTail5.matrix).transpose();
   spikeTail5.render();
 
   var spikeTailSeven = new Pyramid();
@@ -836,6 +901,7 @@ function godzillaLoad(){
   if(g_normalOn){
     spikeTailSeven.textureNum=-4;
   }
+  spikeTailSeven.normalMatrix.setInverseOf(spikeTailSeven.matrix).transpose();
   spikeTailSeven.render();
 
 

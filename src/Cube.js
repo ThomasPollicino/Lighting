@@ -1,8 +1,9 @@
-class Cube {//I had a big bug and Claude AI helped me fix it, this.vertices and this.uv was from AI
+class Cube {
     constructor() {
       this.type = 'cube';
       this.color = [1.0, 1.0, 1.0, 1.0];
       this.matrix = new Matrix4();
+      this.normalMatrix = new Matrix4();
       this.vertices = [
         0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0,
@@ -48,7 +49,6 @@ class Cube {//I had a big bug and Claude AI helped me fix it, this.vertices and 
         -1, 0, 0, -1, 0, 0, -1, 0, 0,
         -1, 0, 0, -1, 0, 0, -1, 0, 0,
         //Top
-
         0, 1, 0, 0, 1, 0, 0, 1, 0,
         0, 1, 0, 0, 1, 0, 0, 1, 0,
         //Right Side
@@ -67,7 +67,9 @@ class Cube {//I had a big bug and Claude AI helped me fix it, this.vertices and 
       var rgba = this.color;
       gl.uniform1i(u_whichTexture,this.textureNum);
 
-      
+      this.normalMatrix.setInverseOf(this.normalMatrix);
+      this.normalMatrix.transpose();
+      gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
 
       gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
       gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);

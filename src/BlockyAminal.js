@@ -15,10 +15,12 @@ var VSHADER_SOURCE = `
   uniform vec3 u_lightPos;
   uniform vec3 u_lightColor;
   varying vec3 v_LightColor;
+  uniform  mat4 u_NormalMatrix;
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
-    v_Normal = a_Normal;
+    v_Normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 0.0)));
+    //v_Normal = a_Normal;
     v_VertPos = u_ModelMatrix * a_Position;
     v_LightColor = u_lightColor;
   }`
@@ -127,6 +129,7 @@ let u_Sampler2;
 let u_whichTexture;
 let u_lightPos;
 let u_cameraPos;
+let u_NormalMatrix;
 
 function setupWebGl(){
     // Retrieve <canvas> element
@@ -251,6 +254,11 @@ function connectVariablesToGLSL(){
   u_lightOn = gl.getUniformLocation(gl.program, 'u_lightOn');
   if (!u_lightOn) {
     console.log('Failed to get the storage location of u_lightOn');
+  return;
+}
+u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+if (!u_NormalMatrix) {
+  console.log('Failed to get the storage location of u_NormalMatrix');
   return;
 }
 
@@ -638,6 +646,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,2.5,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
       if(g_map[x][y]==2){
@@ -649,6 +659,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,4.5,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
       if(g_map[x][y]==3){
@@ -660,6 +672,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,6.5,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
       if(g_map[x][y]==4){
@@ -671,6 +685,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,3.5,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
       if(g_map[x][y]==5){
@@ -682,6 +698,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,3.5,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
       if(g_map[x][y]==6){
@@ -693,6 +711,8 @@ function drawMap(){
         }
         cube.matrix.translate(x-16,0,y-16);
         cube.matrix.scale(1,1,1);
+        cube.normalMatrix.setInverseOf(cube.matrix).transpose();
+
         cube.render();
       }
     }
@@ -755,16 +775,21 @@ function renderAllShapes(){
   if(g_normalOn){
     floor.textureNum=-4;
   }
+  floor.normalMatrix.setInverseOf(floor.matrix).transpose();
+
   floor.render();
 
   var sky = new Cube();
   sky.color=[0.4,0.4,1,1.0];
   sky.textureNum=-3;
+  
+  sky.matrix.scale(-50,-50,-50);
+  sky.matrix.translate(-0.5,-0.5,-0.5);
+  //sky.normalMatrix.setInverseOf(sky.matrix).transpose();
   if(g_normalOn){
     sky.textureNum=-4;
   }
-  sky.matrix.scale(-50,-50,-50);
-  sky.matrix.translate(-0.5,-0.5,-0.5);
+
   sky.render();
 
   

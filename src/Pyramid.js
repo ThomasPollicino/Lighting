@@ -3,6 +3,7 @@ class Pyramid {
     this.type = 'pyramid';
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.matrix = new Matrix4();
+    this.normalMatrix = new Matrix4();
     this.vertices = [
       // Front face
       0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.5, 0.5,
@@ -13,8 +14,7 @@ class Pyramid {
       // Left face
       0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5,
       // Bottom face
-      0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-      1.0, 0.0, 1.0, 0.0, 0.0, 1.0
+      0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0
     ];
     this.uv = [
       // Front face
@@ -26,10 +26,9 @@ class Pyramid {
       // Left face
       0.5, 0.0, 1.0, 1.0, 0.0, 1.0,
       // Bottom face
-      0.0, 0.0, 1.0, 0.0,
-      1.0, 1.0, 0.0, 1.0
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
     ];
-    this.normal = [
+    this.normal = [//I used AI to calculate the normals for the pyramid
       // Front face
       0.0, 0.4472, 0.8944, 0.0, 0.4472, 0.8944, 0.0, 0.4472, 0.8944,
       // Right face
@@ -39,8 +38,7 @@ class Pyramid {
       // Left face
       -0.8944, 0.4472, 0.0, -0.8944, 0.4472, 0.0, -0.8944, 0.4472, 0.0,
       // Bottom face
-      0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-      0.0, -1.0, 0.0, 0.0, -1.0, 0.0
+      0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0
     ];
     this.textureNum = -2;
   }
@@ -48,6 +46,11 @@ class Pyramid {
   render() {
     var rgba = this.color;
     gl.uniform1i(u_whichTexture, this.textureNum);
+
+    this.normalMatrix.setInverseOf(this.matrix);
+    this.normalMatrix.transpose();
+
+    gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
 
     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
     gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
