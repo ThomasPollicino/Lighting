@@ -74,14 +74,12 @@ class Cube {
       gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
       gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
   
-      // Create and bind the vertex buffer
       var vertexBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
       gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(a_Position);
   
-      // Create and bind the UV buffer
       var uvBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uv), gl.STATIC_DRAW);
@@ -93,7 +91,6 @@ class Cube {
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal), gl.STATIC_DRAW);
       gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(a_Normal); 
-      // Draw the triangles
       gl.drawArrays(gl.TRIANGLES, 0, 36);
     }
 

@@ -9,16 +9,35 @@
       Please use a browser that supports "canvas"
     </canvas>
     <p><p id="numdot">XXX</p></p>
-    <p><button type="button" id="heli">Helicopter Cam</button></p>
-    <p><button type="button" id="heliOff">Helicopter Off</button></p>
-    <p><button type="button" id="normalOn">Normal On</button></p>
-    <p><button type="button" id="normalOff">Normal Off</button></p>
-
-    <p><button type="button" id="OnButton">Light On</button></p>
-    <p><button type="button" id="OffButton">Light Off</button></p>
+    <p>
+      <span>
+        <button type="button" id="heli">Helicopter Cam</button>
+        <button type="button" id="heliOff">Helicopter Off</button>
+      </span>
+    </p>
     
-    <p><button type="button" id="triButton">X</button></p>
-    <p><button type="button" id="circleButton">X</button></p>
+    <p>
+      <span>
+        <button type="button" id="normalOn">Normal On</button>
+        <button type="button" id="normalOff">Normal Off</button>
+      </span>
+    </p>
+
+
+    <p>
+      <span>
+        <button type="button" id="OnButton">Light On</button>
+        <button type="button" id="OffButton">Light Off</button>
+      </span>
+    </p>
+    
+    <p>
+      <span>
+        <button type="button" id="stopLight">Stop Light Movement</button>
+        <button type="button" id="startLight">Start Light Movement</button>
+      </span>
+    </p>
+    
 
     <p>
       Light X <input type="range" min="-250" max="250" value="0" class="slider" id="lightSlideX">
@@ -49,6 +68,8 @@
       <img src="texture1.jpg" alt="Texture 2" width="100" height="100" id="texture2" />
       <img src="texture3.jpg" alt="Texture 3" width="100" height="100" id="texture3" />
     </p>
+
+    <p>Grader Notes: I did not do the spot light.  If you want to move the light with the sliders, you have to stop it from moveing first.</p>
     <script src="./lib/webgl-utils.js"></script>
     <script src="./lib/webgl-debug.js"></script>
     <script src="./lib/cuon-utils.js"></script>

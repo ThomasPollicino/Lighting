@@ -91,15 +91,16 @@ var FSHADER_SOURCE = `
     // Eye
     vec3 E = normalize(u_cameraPos - vec3(v_VertPos));
 
-    vec3 specularColor = vec3(0.0, 0.0, 1.0); // Blue color
-    float specular = pow(max(dot(E, R), 0.0), 100.0);
+    vec3 specularColor = vec3(1.0, 1.0, 1.0);
+    float specular = pow(max(dot(E, R), 0.5), 10.0);
     vec3 specularTerm = specular * specularColor;
 
-    vec3 diffuse = vec3(gl_FragColor) * nDotL * v_LightColor*0.8;
+    vec3 diffuse = vec3(gl_FragColor) * nDotL * v_LightColor*1.2;
     vec3 ambient = vec3(gl_FragColor) * 0.5;
     if(u_lightOn){
       
       gl_FragColor = vec4(diffuse + ambient + specularTerm, 1.0);
+      //gl_FragColor = vec4(specularTerm, 1.0);
 
      
     } 
@@ -108,7 +109,6 @@ var FSHADER_SOURCE = `
       ambient *= 0.5;
       gl_FragColor = vec4(ambient, 1.0);
     }
-    //gl_FragColor = vec4(diffuse + ambient + specular, 1.0);
 
   }`
 
@@ -310,6 +310,7 @@ let g_yellowAnimation=false;
 let g_magentaAnimation=false;
 let g_lightPos=[0,1,-2];
 let g_lightOn = true;
+let g_lightMove = true;
 
 
 
@@ -358,6 +359,9 @@ function addActionsForHtmlUI(){
 
     document.getElementById('OnButton').onclick = function() {g_lightOn = true;};
     document.getElementById('OffButton').onclick = function() {g_lightOn = false;};
+
+    document.getElementById('startLight').onclick = function() {g_lightMove = true;};
+    document.getElementById('stopLight').onclick = function() {g_lightMove = false;};
 
 
     canvas.onmousedown = function(ev) { if(ev.buttons==1) { handleTextureClick(ev)}};
@@ -588,9 +592,12 @@ function updateAnimationAngles(){
   if(g_magentaAnimation){
     g_magentaAngle=(45*Math.sin(g_seconds));
   }
-  g_lightPos[1]=Math.cos(g_seconds);
-  g_lightPos[0]=4*Math.cos(g_seconds);
-  g_lightPos[2]=4*Math.cos(g_seconds);
+  if(g_lightMove){
+    g_lightPos[1]=Math.cos(g_seconds);
+    g_lightPos[0]=4*Math.cos(g_seconds);
+    g_lightPos[2]=4*Math.cos(g_seconds);
+  }
+  
 
 
   

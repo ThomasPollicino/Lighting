@@ -28,7 +28,7 @@ class Pyramid {
       // Bottom face
       0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
     ];
-    this.normal = [//I used AI to calculate the normals for the pyramid
+    this.normal = [//I used AI to get the normals for the pyramid
       // Front face
       0.0, 0.4472, 0.8944, 0.0, 0.4472, 0.8944, 0.0, 0.4472, 0.8944,
       // Right face
