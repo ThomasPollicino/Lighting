@@ -41,7 +41,7 @@ var FSHADER_SOURCE = `
   uniform vec3 u_lightColor;
   varying vec3 v_LightColor;
   uniform bool u_lightOn;
-
+  uniform bool u_disco;
 
 
   void main() {
@@ -93,14 +93,20 @@ var FSHADER_SOURCE = `
 
     vec3 specularColor = vec3(1.0, 1.0, 1.0);
     float specular = pow(max(dot(E, R), 0.5), 10.0);
-    vec3 specularTerm = specular * specularColor;
+    vec3 specularC = specular * specularColor;
 
     vec3 diffuse = vec3(gl_FragColor) * nDotL * v_LightColor*1.2;
     vec3 ambient = vec3(gl_FragColor) * 0.5;
     if(u_lightOn){
+      if(u_disco){
+        gl_FragColor = vec4(R, 1.0);
+
+      } 
+      else {
+        gl_FragColor = vec4(diffuse + ambient + specularC, 1.0);
+      //gl_FragColor = vec4(specularC, 1.0);
+      }
       
-      gl_FragColor = vec4(diffuse + ambient + specularTerm, 1.0);
-      //gl_FragColor = vec4(specularTerm, 1.0);
 
      
     } 
@@ -261,6 +267,11 @@ if (!u_NormalMatrix) {
   console.log('Failed to get the storage location of u_NormalMatrix');
   return;
 }
+u_disco = gl.getUniformLocation(gl.program, 'u_disco');
+if (!u_disco) {
+  console.log('Failed to get the storage location of disco');
+  return;
+}
 
 
   
@@ -311,6 +322,7 @@ let g_magentaAnimation=false;
 let g_lightPos=[0,1,-2];
 let g_lightOn = true;
 let g_lightMove = true;
+let g_disco = false;
 
 
 
@@ -362,6 +374,9 @@ function addActionsForHtmlUI(){
 
     document.getElementById('startLight').onclick = function() {g_lightMove = true;};
     document.getElementById('stopLight').onclick = function() {g_lightMove = false;};
+
+    document.getElementById('discoOn').onclick = function() {g_disco = true;};
+    document.getElementById('discoOff').onclick = function() {g_disco = false;};
 
 
     canvas.onmousedown = function(ev) { if(ev.buttons==1) { handleTextureClick(ev)}};
@@ -752,6 +767,7 @@ function renderAllShapes(){
   gl.uniform3f(u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
   gl.uniform3f(u_cameraPos, camera.eye.x, camera.eye.y, camera.eye.z);
   gl.uniform1i(u_lightOn, g_lightOn);
+  gl.uniform1i(u_disco, g_disco);
 
   drawMap();
 
