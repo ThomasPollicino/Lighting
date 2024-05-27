@@ -90,7 +90,7 @@ class Cube {//I had a big bug and Claude AI helped me fix it, this.vertices and 
       gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal), gl.STATIC_DRAW);
       gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
-      gl.enableVertexAttribArray(a_Normal);
+      gl.enableVertexAttribArray(a_Normal); 
       // Draw the triangles
       gl.drawArrays(gl.TRIANGLES, 0, 36);
     }

@@ -12,11 +12,15 @@ var VSHADER_SOURCE = `
   uniform mat4 u_GlobalRotateMatrix;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
+  uniform vec3 u_lightPos;
+  uniform vec3 u_lightColor;
+  varying vec3 v_LightColor;
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
     v_Normal = a_Normal;
     v_VertPos = u_ModelMatrix * a_Position;
+    v_LightColor = u_lightColor;
   }`
 
 // Fragment shader program
@@ -32,6 +36,12 @@ var FSHADER_SOURCE = `
   uniform vec3 u_lightPos;
   uniform vec3 u_cameraPos;
   varying vec4 v_VertPos;
+  uniform vec3 u_lightColor;
+  varying vec3 v_LightColor;
+  uniform bool u_lightOn;
+
+
+
   void main() {
 
     if(u_whichTexture == -4){
@@ -73,18 +83,31 @@ var FSHADER_SOURCE = `
     vec3 N = normalize(v_Normal);
     float nDotL = max(dot(N, L), 0.0);
 
-    //Reflection
+    // Reflection
     vec3 R = reflect(-L, N);
 
-    //eye
-    vec3 E = normalize(u_cameraPos-vec3(v_VertPos));
+    // Eye
+    vec3 E = normalize(u_cameraPos - vec3(v_VertPos));
 
-    //Specular
-    float specular = pow(max(dot(E, R), 0.0), 1.0);
+    vec3 specularColor = vec3(0.0, 0.0, 1.0); // Blue color
+    float specular = pow(max(dot(E, R), 0.0), 100.0);
+    vec3 specularTerm = specular * specularColor;
 
-    vec3 diffuse = vec3(gl_FragColor) * nDotL*0.7;
-    vec3 ambient = vec3(gl_FragColor) * 0.3;
-    gl_FragColor = vec4(diffuse + ambient + specular, 1.0);
+    vec3 diffuse = vec3(gl_FragColor) * nDotL * v_LightColor*0.8;
+    vec3 ambient = vec3(gl_FragColor) * 0.5;
+    if(u_lightOn){
+      
+      gl_FragColor = vec4(diffuse + ambient + specularTerm, 1.0);
+
+     
+    } 
+    else {
+      diffuse = vec3(0.0);
+      ambient *= 0.5;
+      gl_FragColor = vec4(ambient, 1.0);
+    }
+    //gl_FragColor = vec4(diffuse + ambient + specular, 1.0);
+
   }`
 
 let canvas;
@@ -215,6 +238,21 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_whichTexture');
     return false;
   }
+  u_lightColor = gl.getUniformLocation(gl.program, 'u_lightColor');
+  if(!u_lightColor) {
+    console.log('Failed to get the storage location of u_lightColor');
+    return false;
+  }
+  u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
+  if(!u_lightPos) {
+    console.log('Failed to get the storage location of u_lightPos');
+    return false;
+  }
+  u_lightOn = gl.getUniformLocation(gl.program, 'u_lightOn');
+  if (!u_lightOn) {
+    console.log('Failed to get the storage location of u_lightOn');
+  return;
+}
 
 
   
@@ -263,6 +301,9 @@ let g_magentaAngle=0;
 let g_yellowAnimation=false;
 let g_magentaAnimation=false;
 let g_lightPos=[0,1,-2];
+let g_lightOn = true;
+
+
 
 
 
@@ -305,6 +346,11 @@ function addActionsForHtmlUI(){
     document.getElementById('lightSlideX').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[0] = this.value/100; renderAllShapes();}});
     document.getElementById('lightSlideY').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[1] = this.value/100; renderAllShapes();}});
     document.getElementById('lightSlideZ').addEventListener('mousemove', function(ev) { if(ev.buttons==1) {g_lightPos[2] = this.value/100; renderAllShapes();}});
+
+
+    document.getElementById('OnButton').onclick = function() {g_lightOn = true;};
+    document.getElementById('OffButton').onclick = function() {g_lightOn = false;};
+
 
     canvas.onmousedown = function(ev) { if(ev.buttons==1) { handleTextureClick(ev)}};
 
@@ -534,7 +580,12 @@ function updateAnimationAngles(){
   if(g_magentaAnimation){
     g_magentaAngle=(45*Math.sin(g_seconds));
   }
-  //g_lightPos[0]=Math.cos(g_seconds);
+  g_lightPos[1]=Math.cos(g_seconds);
+  g_lightPos[0]=4*Math.cos(g_seconds);
+  g_lightPos[2]=4*Math.cos(g_seconds);
+
+
+  
 }
 
 
@@ -544,32 +595,32 @@ var g_map=[
   [2,2,2,1,1,2,2,1,1,1,2,2,1,1,1,1,2,2,1,1,2,2,1,1,1,2,2,1,2,2,1,1],//1
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//2
   [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//3
-  [2,0,0,1,1,2,2,1,1,2,2,1,1,0,0,2,2,0,0,0,0,0,0,0,0,3,3,0,0,6,0,2],//4
-  [1,0,0,1,1,2,2,1,1,2,2,1,1,0,0,2,2,0,0,0,0,0,0,0,0,3,3,0,0,0,0,2],//5
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,1],//6
   [1,0,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//7
   [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//8
-  [2,0,0,1,1,2,2,2,2,1,1,0,0,0,2,2,2,2,1,1,1,1,2,2,0,0,0,0,0,0,0,1],//9
-  [1,0,0,1,1,2,2,2,2,1,1,0,0,0,2,2,2,2,1,1,1,1,2,2,0,0,0,0,0,0,0,2],//10
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//11
   [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//12
-  [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//13
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//14
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,2],//15
-  [2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//16
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//17
   [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//18
-  [2,0,0,1,1,2,2,2,2,1,1,0,0,0,1,1,2,2,1,1,1,1,2,2,0,0,0,0,0,0,0,1],//19
-  [2,0,0,1,1,2,2,2,2,1,1,0,0,0,1,1,2,2,1,1,1,1,2,2,0,0,0,0,0,0,0,1],//20
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//21
   [2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//22
   [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//23
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//24
   [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//25
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//26
-  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,3,3,3,0,0,0,0,1],//27
-  [2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,0,0,0,0,1],//28
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,0,0,0,0,2],//29
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
+  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//4
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],//30
   [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],//31
   [2,2,1,1,2,2,1,1,2,2,1,1,2,2,1,2,2,1,2,1,2,2,1,2,2,1,2,2,1,1,2,2],//32
@@ -593,6 +644,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-0;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,4.5,1);
         cube.render();
@@ -601,6 +655,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-0;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,6.5,1);
         cube.render();
@@ -609,6 +666,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-1;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,3.5,1);
         cube.render();
@@ -617,6 +677,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-2;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,-0.95,y-16);
         cube.matrix.scale(1,3.5,1);
         cube.render();
@@ -625,6 +688,9 @@ function drawMap(){
         var cube = new Cube();
         cube.color=[0.1,0.1,0.1,1.0];
         cube.textureNum=-6;
+        if(g_normalOn){
+          cube.textureNum=-4;
+        }
         cube.matrix.translate(x-16,0,y-16);
         cube.matrix.scale(1,1,1);
         cube.render();
@@ -654,9 +720,11 @@ function renderAllShapes(){
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  var lightColor = [1, g_yellowAngle / 180, g_magentaAngle / 180];
   gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
-
+  gl.uniform3f(u_lightColor, lightColor[0], lightColor[1], lightColor[2]);
   gl.uniform3f(u_cameraPos, camera.eye.x, camera.eye.y, camera.eye.z);
+  gl.uniform1i(u_lightOn, g_lightOn);
 
   drawMap();
 
@@ -684,6 +752,9 @@ function renderAllShapes(){
   floor.matrix.translate(0.0,-0.95,0);
   floor.matrix.scale(100,0.01,100);
   floor.matrix.translate(-0.5,-0.5,-0.5);
+  if(g_normalOn){
+    floor.textureNum=-4;
+  }
   floor.render();
 
   var sky = new Cube();

@@ -7,6 +7,9 @@ function godzillaLoad(){
   var rightFootCoord = new Matrix4(rightFoot.matrix);
   rightFoot.matrix.translate(-0.01,0,0);
   rightFoot.matrix.scale(0.43,0.2,0.5);
+  if(g_normalOn){
+    rightFoot.textureNum=-4;
+  }
   rightFoot.render();
   //Left Foot
   var leftFoot = new Cube();
@@ -18,6 +21,9 @@ function godzillaLoad(){
   leftFoot.matrix.translate(-0.01,0,0); 
 
   leftFoot.matrix.scale(0.43,0.2,0.5);
+  if(g_normalOn){
+    leftFoot.textureNum=-4;
+  }
   leftFoot.render();
 
 
@@ -37,6 +43,9 @@ function godzillaLoad(){
   var rightLegCoord = new Matrix4(bRightleg.matrix);
   bRightleg.matrix.scale(0.4,0.6,0.45);
   bRightleg.matrix.translate(0,-0.28,0);
+  if(g_normalOn){
+    bRightleg.textureNum=-4;
+  }
   bRightleg.render();
 
   //BottmLeftLeg
@@ -54,6 +63,9 @@ function godzillaLoad(){
   var leftLegCoord = new Matrix4(bLeftleg.matrix);
   bLeftleg.matrix.scale(0.4,0.6,0.45);
   bLeftleg.matrix.translate(0,-0.28,0);
+  if(g_normalOn){
+    bLeftleg.textureNum=-4;
+  }
   bLeftleg.render();
 
   //TopRightLeg
@@ -71,6 +83,9 @@ function godzillaLoad(){
 
   tRightleg.matrix.scale(0.45,0.7,0.551);
   tRightleg.matrix.translate(-0.05,-0.25,0);
+  if(g_normalOn){
+    tRightleg.textureNum=-4;
+  }
   tRightleg.render();
 
   //TopLeftLeg
@@ -89,6 +104,9 @@ function godzillaLoad(){
   var TLegCoord = new Matrix4(tLeftleg.matrix);
   tLeftleg.matrix.scale(0.45,0.7,0.551);
   tLeftleg.matrix.translate(-0.05,-0.25,0);
+  if(g_normalOn){
+    tLeftleg.textureNum=-4;
+  }
   tLeftleg.render();
 
 
@@ -117,7 +135,9 @@ function godzillaLoad(){
   var bodyCoorArmLeft = new Matrix4(body.matrix);
   body.matrix.translate(0,0,-0.20);
   body.matrix.scale(1.1,1.7,0.5);
-  
+  if(g_normalOn){
+    body.textureNum=-4;
+  }
   body.render();
 
   //ArmRight
@@ -138,6 +158,9 @@ function godzillaLoad(){
 
   }
   armRight.matrix.scale(0.4,0.4,-1.2);
+  if(g_normalOn){
+    armRight.textureNum=-4;
+  }
   armRight.render();
 
   //ArmLeft
@@ -159,6 +182,9 @@ function godzillaLoad(){
 
   }
   armLeft.matrix.scale(0.4,0.4,-1.2);
+  if(g_normalOn){
+    armLeft.textureNum=-4;
+  }
   armLeft.render();
 
 
@@ -170,6 +196,9 @@ function godzillaLoad(){
   chest.matrix.translate(0.01,0.25,-0.25);
   var chestCoord = new Matrix4(chest.matrix);
   chest.matrix.scale(1,1.4,0.2);
+  if(g_normalOn){
+    chest.textureNum=-4;
+  }
   chest.render();
 
   //Peck
@@ -179,6 +208,9 @@ function godzillaLoad(){
   peck.matrix = chestCoord;
   peck.matrix.translate(0.15,0.50,-0.05);
   peck.matrix.scale(0.8,0.8,0.1);
+  if(g_normalOn){
+    peck.textureNum=-4;
+  }
   peck.render();
 
   //Neck
@@ -188,6 +220,9 @@ function godzillaLoad(){
   neck.matrix.translate(0.25,1.6,-0.26);
   var neckCoord = new Matrix4(neck.matrix);
   neck.matrix.scale(0.6,0.17,0.5);
+  if(g_normalOn){
+    neck.textureNum=-4;
+  }
   neck.render();
 
   //Head
@@ -232,6 +267,9 @@ function godzillaLoad(){
   
 
   head.matrix.scale(0.8,0.75,0.6);
+  if(g_normalOn){
+    head.textureNum=-4;
+  }
   head.render();
 
   
@@ -246,6 +284,9 @@ function godzillaLoad(){
   var mouthTopCoordThree = new Matrix4(mouthTop.matrix);
   var mouthTopCoordFour = new Matrix4(mouthTop.matrix);
   mouthTop.matrix.scale(0.6,0.3,0.45);
+  if(g_normalOn){
+    mouthTop.textureNum=-4;
+  }
   mouthTop.render();
 
   //ToothOne
@@ -254,6 +295,9 @@ function godzillaLoad(){
   toothOne.matrix = mouthTopCoord;
   toothOne.matrix.translate(0.05,-0.05,0.05);
   toothOne.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothOne.textureNum=-4;
+  }
   toothOne.render();
 
   //ToothTwo
@@ -262,6 +306,9 @@ function godzillaLoad(){
   toothTwo.matrix = mouthTopCoordTwo;
   toothTwo.matrix.translate(0.05,-0.05,0.2);
   toothTwo.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothTwo.textureNum=-4;
+  }
   toothTwo.render();
 
   //ToothThree
@@ -270,6 +317,9 @@ function godzillaLoad(){
   toothThree.matrix = mouthTopCoordThree;
   toothThree.matrix.translate(0.45,-0.05,0.05);
   toothThree.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothThree.textureNum=-4;
+  }
   toothThree.render();
 
   //ToothFour
@@ -278,6 +328,9 @@ function godzillaLoad(){
   toothFour.matrix = mouthTopCoordFour;
   toothFour.matrix.translate(0.45,-0.05,0.2);
   toothFour.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothFour.textureNum=-4;
+  }
   toothFour.render();
 
 
@@ -318,6 +371,9 @@ function godzillaLoad(){
   var mouthBottomCoordFour = new Matrix4(mouthBottom.matrix);
   var mouthBottomCoordFive = new Matrix4(mouthBottom.matrix);
   mouthBottom.matrix.scale(0.6,0.28,0.65);
+  if(g_normalOn){
+    mouthBottom.textureNum=-4;
+  }
   mouthBottom.render();
 
   //ToothOne
@@ -326,6 +382,9 @@ function godzillaLoad(){
   toothOneBot.matrix = mouthBottomCoord;
   toothOneBot.matrix.translate(0.05,-0.05,0.3);
   toothOneBot.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothOneBot.textureNum=-4;
+  }
   toothOneBot.render();
 
   //ToothTwo
@@ -334,6 +393,9 @@ function godzillaLoad(){
   toothTwoBot.matrix = mouthBottomCoordTwo;
   toothTwoBot.matrix.translate(0.05,-0.05,0.51);
   toothTwoBot.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothTwoBot.textureNum=-4;
+  }
   toothTwoBot.render();
 
   //ToothThree
@@ -342,6 +404,9 @@ function godzillaLoad(){
   toothThreeBot.matrix = mouthBottomCoordThree;
   toothThreeBot.matrix.translate(0.45,-0.05,0.3);
   toothThreeBot.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothThreeBot.textureNum=-4;
+  }
   toothThreeBot.render();
 
   //ToothFour
@@ -350,6 +415,9 @@ function godzillaLoad(){
   toothFourBot.matrix = mouthBottomCoordFour;
   toothFourBot.matrix.translate(0.45,-0.05,0.51);
   toothFourBot.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothFourBot.textureNum=-4;
+  }
   toothFourBot.render();
 
   //ToothFive
@@ -358,6 +426,9 @@ function godzillaLoad(){
   toothFiveBot.matrix = mouthBottomCoordFive;
   toothFiveBot.matrix.translate(0.25,-0.05,0.49);
   toothFiveBot.matrix.scale(0.1,0.1,0.1);
+  if(g_normalOn){
+    toothFiveBot.textureNum=-4;
+  }
   toothFiveBot.render();
 
 
@@ -376,6 +447,9 @@ function godzillaLoad(){
 
     }
   }
+  if(g_normalOn){
+    eyeRight.textureNum=-4;
+  }
   eyeRight.render();
 
   
@@ -390,7 +464,9 @@ function godzillaLoad(){
       eyeLeft.color=[0.3,0.3,1,1.0];
     }
   }
-
+  if(g_normalOn){
+    eyeLeft.textureNum=-4;
+  }
   eyeLeft.render();
 
  
@@ -406,6 +482,9 @@ function godzillaLoad(){
   var backCoordFour = new Matrix4(back.matrix);
   var backCoordFive = new Matrix4(back.matrix);
   back.matrix.scale(1,1,0.1);
+  if(g_normalOn){
+    back.textureNum=-4;
+  }
   back.render();
 
   //BackSpikes
@@ -428,6 +507,9 @@ function godzillaLoad(){
       spikeBack.matrix.scale(1, 2, 1);
     }
   }
+  if(g_normalOn){
+    spikeBack.textureNum=-4;
+  }
   spikeBack.render();
 
   var spikeBack2 = new Pyramid();
@@ -449,6 +531,9 @@ function godzillaLoad(){
       spikeBack2.matrix.scale(1, 2, 1);
     }
   }
+  if(g_normalOn){
+    spikeBack2.textureNum=-4;
+  }
   spikeBack2.render();
 
   var spikeBack3 = new Pyramid();
@@ -469,6 +554,9 @@ function godzillaLoad(){
       spikeBack3.matrix.translate(-0.333,0,0);
       spikeBack3.matrix.scale(1, 2, 1);
     }
+  }
+  if(g_normalOn){
+    spikeBack3.textureNum=-4;
   }
   spikeBack3.render();
 
@@ -493,6 +581,9 @@ function godzillaLoad(){
       spikeBack4.matrix.scale(1, 2, 1);
     }
   }
+  if(g_normalOn){
+    spikeBack4.textureNum=-4;
+  }
   spikeBack4.render();
 
   var spikeBack5 = new Pyramid();
@@ -511,6 +602,9 @@ function godzillaLoad(){
 
       spikeBack5.matrix.scale(1, 2, 1);
     }
+  }
+  if(g_normalOn){
+    spikeBack5.textureNum=-4;
   }
   spikeBack5.render();
 
@@ -541,7 +635,9 @@ function godzillaLoad(){
 
   var tailCoord = new Matrix4(tailStart.matrix);
   tailStart.matrix.scale(0.8,0.9,4);
-  
+  if(g_normalOn){
+    tailStart.textureNum=-4;
+  }
   tailStart.render();
 
   
@@ -557,6 +653,9 @@ function godzillaLoad(){
   var tailtwoCoordSpike = new Matrix4(tailTwo.matrix);
 
   tailTwo.matrix.scale(0.6,0.6,5);
+  if(g_normalOn){
+    tailTwo.textureNum=-4;
+  }
   tailTwo.render();
 
   var spikeTailTwo = new Pyramid();
@@ -576,6 +675,9 @@ function godzillaLoad(){
     }
     
   } 
+  if(g_normalOn){
+    spikeTailTwo.textureNum=-4;
+  }
   spikeTailTwo.render();
   
 
@@ -587,6 +689,9 @@ function godzillaLoad(){
   var tailThreeCoord = new Matrix4(tailThree.matrix);
   tailThree.matrix.scale(0.5,0.5,6);
   tailThree.matrix.rotate(-20,1,0,0);
+  if(g_normalOn){
+    tailThree.textureNum=-4;
+  }
   tailThree.render();
 
   var tailFour = new Cube();
@@ -597,6 +702,9 @@ function godzillaLoad(){
   var tailFourCoordSpike = new Matrix4(tailFour.matrix);
   tailFour.matrix.scale(0.4,0.4,8);
   tailFour.matrix.rotate(-50,1,0,0);
+  if(g_normalOn){
+    tailFour.textureNum=-4;
+  }
   tailFour.render();
 
   var spikeTailFour = new Pyramid();
@@ -616,6 +724,9 @@ function godzillaLoad(){
     }
     
   } 
+  if(g_normalOn){
+    spikeTailFour.textureNum=-4;
+  }
   spikeTailFour.render();
 
   var tailFive = new Cube();
@@ -626,6 +737,9 @@ function godzillaLoad(){
   tailFive.matrix.scale(0.32,0.25,6.5);
   tailFive.matrix.rotate(-65,1,0,0);
   tailFive.matrix.translate(0,0,-0.3);
+  if(g_normalOn){
+    tailFive.textureNum=-4;
+  }
   tailFive.render();
 
   var tailSix = new Cube();
@@ -637,6 +751,9 @@ function godzillaLoad(){
   tailSix.matrix.scale(0.32,0.25,8.5);
   tailSix.matrix.rotate(-40,1,0,0);
   tailSix.matrix.translate(0,0.0,-0.55);
+  if(g_normalOn){
+    tailSix.textureNum=-4;
+  }
   tailSix.render();
 
   var spikeTailSix = new Pyramid();
@@ -656,6 +773,9 @@ function godzillaLoad(){
     }
     
   } 
+  if(g_normalOn){
+    spikeTailSix.textureNum=-4;
+  }
   spikeTailSix.render();
 
   var tailSeven = new Cube();
@@ -667,6 +787,9 @@ function godzillaLoad(){
   tailSeven.matrix.scale(0.32,0.25,5.5);
   tailSeven.matrix.rotate(-10,1,0,0);
   tailSeven.matrix.translate(0,0.05,-1.0);
+  if(g_normalOn){
+    tailSeven.textureNum=-4;
+  }
   tailSeven.render();
   
   var spikeTail5 = new Pyramid();
@@ -687,6 +810,9 @@ function godzillaLoad(){
     }
     
   } 
+  if(g_normalOn){
+    spikeTail5.textureNum=-4;
+  }
   spikeTail5.render();
 
   var spikeTailSeven = new Pyramid();
@@ -707,6 +833,9 @@ function godzillaLoad(){
     }
     
   } 
+  if(g_normalOn){
+    spikeTailSeven.textureNum=-4;
+  }
   spikeTailSeven.render();
 
 
